@@ -2,7 +2,7 @@
 crowd counting based no SKT and boosting
 
 for mobienetv3 size test, input code as follows:
-```
+```ruby
 import torch
 
 input_tensor = torch.randn(1, 3, 224, 224)
