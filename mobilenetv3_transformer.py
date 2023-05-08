@@ -23,9 +23,10 @@ class CustomMobileNetV3(nn.Module):
         self.transform4 = feature_transform(96, 512)
         self.layers5 = original_model.features[12] # 12
         self.layers6 = original_model.avgpool # 12
+        self.layers7 = nn.Conv2d(576, 512, kernel_size=3, stride=1, padding=1)
 
 
-        d_model = 576
+        d_model = 512
         nhead = 2
         num_layers = 1
         dim_feedforward = 2048
@@ -38,7 +39,7 @@ class CustomMobileNetV3(nn.Module):
 
         self.encoder = TransformerEncoder(encoder_layer, num_layers, if_norm)
         self.reg_layer_0 = nn.Sequential(
-            nn.Conv2d(576, 256, kernel_size=3, padding=1),
+            nn.Conv2d(512, 256, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(256, 128, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
@@ -59,6 +60,7 @@ class CustomMobileNetV3(nn.Module):
         self.extractions.append(self.transform4(x))
         x = self.layers5(x)
         x = self.layers6(x)
+        x = self.layers7(x)
 
         if self.training is True:
             return self.extractions
